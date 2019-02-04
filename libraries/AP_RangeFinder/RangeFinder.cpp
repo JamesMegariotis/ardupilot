@@ -27,6 +27,7 @@
 #include "AP_RangeFinder_LeddarOne.h"
 #include "AP_RangeFinder_uLanding.h"
 #include "AP_RangeFinder_trone.h"
+#include "AP_RangeFinder_TerraRangerSerial.h"
 #include <AP_BoardConfig/AP_BoardConfig.h>
 
 extern const AP_HAL::HAL &hal;
@@ -664,6 +665,12 @@ void RangeFinder::detect_instance(uint8_t instance)
             drivers[instance] = new AP_RangeFinder_LightWareSerial(*this, instance, state[instance], serial_manager);
         }
         break;
+    case RangeFinder_TYPE_TRSERIAL:
+		if (AP_RangeFinder_TerraRangerSerial::detect(*this, instance, serial_manager)) {
+			state[instance].instance = instance;
+			drivers[instance] = new AP_RangeFinder_TerraRangerSerial(*this, instance, state[instance], serial_manager);
+		}
+		break;
     case RangeFinder_TYPE_LEDDARONE:
         if (AP_RangeFinder_LeddarOne::detect(*this, instance, serial_manager)) {
             state[instance].instance = instance;
